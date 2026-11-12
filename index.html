@@ -165,6 +165,48 @@
       border-color: #CBD5E1;
     }
 
+    .btn-bgm {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--border);
+    }
+
+    .btn-bgm.is-playing {
+      background: var(--purple-bg);
+      color: var(--purple-text);
+      border-color: var(--purple-border);
+    }
+
+    .equalizer-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 14px;
+    }
+
+    .eq-bar {
+      width: 2.5px;
+      height: 4px;
+      background: currentColor;
+      border-radius: var(--radius-full);
+      transition: height 0.2s ease;
+    }
+
+    .btn-bgm.is-playing .eq-bar:nth-child(1) {
+      animation: eq-anim 0.9s infinite ease-in-out;
+    }
+    .btn-bgm.is-playing .eq-bar:nth-child(2) {
+      animation: eq-anim 1.1s infinite ease-in-out 0.2s;
+    }
+    .btn-bgm.is-playing .eq-bar:nth-child(3) {
+      animation: eq-anim 0.8s infinite ease-in-out 0.4s;
+    }
+
+    @keyframes eq-anim {
+      0%, 100% { height: 4px; }
+      50% { height: 13px; }
+    }
+
     /* Hero Section */
     .hero {
       padding: 60px 0 48px;
@@ -432,12 +474,13 @@
         <span>Ban Thẩm Định Tín Dụng 2026 • Đội Trưng Tập</span>
       </div>
       <div class="nav-actions">
-        <button id="toggle-sound-btn" class="btn-sound" title="Bật/Tắt âm thanh hiệu ứng">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-          <span id="sound-status-text">Âm thanh: Bật</span>
+        <button id="toggle-bgm-btn" class="btn-sound btn-bgm" title="Bật/Tắt nhạc nền nhẹ nhàng lắng đọng">
+          <span class="equalizer-bars" id="eq-bars">
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+          </span>
+          <span id="bgm-status-text">Bật Nhạc Nền</span>
         </button>
       </div>
     </header>
@@ -529,65 +572,155 @@
     const elMood = document.getElementById('mood-label');
     const elFireBtn = document.getElementById('btn-fire-confetti');
     const elFireCounter = document.getElementById('fire-count-badge');
-    const elSoundBtn = document.getElementById('toggle-sound-btn');
-    const elSoundText = document.getElementById('sound-status-text');
+    const elBgmBtn = document.getElementById('toggle-bgm-btn');
+    const elBgmText = document.getElementById('bgm-status-text');
 
-    // Audio & Sound synthesizer using Web Audio API
+    // Ambient Gentle Background Music Engine (Pure Web Audio - Warm Rhodes/Piano)
     let audioCtx = null;
-    let soundEnabled = true;
+    let bgmMasterGain = null;
+    let bgmPlaying = false;
+    let bgmTimer = null;
+    let currentChordIndex = 0;
+
+    // Nostalgic, gentle, emotional chords: Cmaj9 -> Em7 -> Fmaj9 -> Gadd9
+    const BGM_CHORDS = [
+      { bass: 130.81, notes: [261.63, 329.63, 392.00, 493.88, 587.33] }, // Cmaj9
+      { bass: 164.81, notes: [246.94, 329.63, 392.00, 493.88, 587.33] }, // Em7
+      { bass: 174.61, notes: [261.63, 349.23, 392.00, 440.00, 523.25] }, // Fmaj9
+      { bass: 196.00, notes: [246.94, 293.66, 392.00, 440.00, 493.88] }  // Gadd9
+    ];
 
     function initAudio() {
       if (!audioCtx) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         if (AudioContext) {
           audioCtx = new AudioContext();
+          bgmMasterGain = audioCtx.createGain();
+          bgmMasterGain.gain.setValueAtTime(0.24, audioCtx.currentTime); // gentle ambient volume
+          bgmMasterGain.connect(audioCtx.destination);
         }
       }
-    }
-
-    function playPopSound() {
-      if (!soundEnabled) return;
-      initAudio();
-      if (!audioCtx) return;
-      if (audioCtx.state === 'suspended') {
+      if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
+    }
 
-      const osc = audioCtx.createOscillator();
+    // Play a single warm, gentle Rhodes/Piano note
+    function playWarmTone(freq, time, duration, velocity = 0.5) {
+      if (!audioCtx) return;
+
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      osc1.type = 'sine';
+      osc2.type = 'triangle';
+      osc1.frequency.setValueAtTime(freq, time);
+      osc2.frequency.setValueAtTime(freq, time);
+
+      // Lowpass filter for warm, soothing, mellow sound
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(750, time);
+      filter.frequency.exponentialRampToValueAtTime(320, time + duration);
+
       const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.0001, time);
+      gain.gain.linearRampToValueAtTime(velocity * 0.16, time + 0.04);
+      gain.gain.exponentialRampToValueAtTime(velocity * 0.04, time + 0.9);
+      gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
 
-      osc.type = 'triangle';
-      const now = audioCtx.currentTime;
-      osc.frequency.setValueAtTime(523.25, now); // C5
-      osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.15); // C6
+      osc1.connect(filter);
+      osc2.connect(filter);
+      filter.connect(gain);
+      gain.connect(bgmMasterGain);
 
-      gain.gain.setValueAtTime(0.3, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc1.start(time);
+      osc2.start(time);
+      osc1.stop(time + duration);
+      osc2.stop(time + duration);
+    }
+
+    // Deep gentle pad tone in the background
+    function playWarmPad(freq, time, duration) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, time);
+
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.0001, time);
+      gain.gain.linearRampToValueAtTime(0.05, time + 1.2);
+      gain.gain.linearRampToValueAtTime(0.0001, time + duration);
 
       osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      gain.connect(bgmMasterGain);
 
-      osc.start(now);
-      osc.stop(now + 0.35);
+      osc.start(time);
+      osc.stop(time + duration);
     }
 
+    function scheduleBgmMeasure() {
+      if (!bgmPlaying || !audioCtx) return;
+      const now = audioCtx.currentTime + 0.05;
+      const chord = BGM_CHORDS[currentChordIndex];
+      const measureDuration = 4.2; // Slow, contemplative tempo (~60 BPM)
+
+      // Bass pad
+      playWarmPad(chord.bass, now, measureDuration + 0.5);
+
+      // Delicate arpeggiated piano notes
+      chord.notes.forEach((freq, idx) => {
+        const noteDelay = idx * 0.36;
+        playWarmTone(freq, now + noteDelay, 3.2, 0.42);
+      });
+
+      // Gentle melodic echoes
+      const echo1 = chord.notes[2];
+      const echo2 = chord.notes[4] || chord.notes[3];
+      playWarmTone(echo1, now + 1.9, 2.0, 0.22);
+      playWarmTone(echo2, now + 2.8, 2.2, 0.25);
+
+      currentChordIndex = (currentChordIndex + 1) % BGM_CHORDS.length;
+
+      bgmTimer = setTimeout(scheduleBgmMeasure, (measureDuration - 0.2) * 1000);
+    }
+
+    function startBgm() {
+      initAudio();
+      bgmPlaying = true;
+      elBgmBtn.classList.add('is-playing');
+      elBgmText.textContent = 'Nhạc nền: Đang phát';
+      scheduleBgmMeasure();
+    }
+
+    function stopBgm() {
+      bgmPlaying = false;
+      if (bgmTimer) clearTimeout(bgmTimer);
+      elBgmBtn.classList.remove('is-playing');
+      elBgmText.textContent = 'Bật Nhạc Nền';
+    }
+
+    elBgmBtn.addEventListener('click', () => {
+      if (!bgmPlaying) {
+        startBgm();
+      } else {
+        stopBgm();
+      }
+    });
+
+    // Optional celebration chime on button click
     function playTadaSound() {
-      if (!soundEnabled) return;
       initAudio();
       if (!audioCtx) return;
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
 
       const now = audioCtx.currentTime;
-      const notes = [523.25, 659.25, 783.99, 1046.50]; // C, E, G, High C
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
       notes.forEach((freq, idx) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now + idx * 0.08);
 
-        gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.18, now + idx * 0.08);
         gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
 
         osc.connect(gain);
@@ -597,12 +730,6 @@
         osc.stop(now + idx * 0.08 + 0.4);
       });
     }
-
-    elSoundBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      elSoundText.textContent = soundEnabled ? 'Âm thanh: Bật' : 'Âm thanh: Tắt';
-      if (soundEnabled) playPopSound();
-    });
 
     // Countdown Logic
     function updateCountdown() {

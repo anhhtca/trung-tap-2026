@@ -113,3 +113,4 @@ Trang đếm ngược trực quan, tinh gọn tập trung vào tâm điểm đ�
 - **Countdown Hero Card:** 4 khối số cỡ lớn Ngày - Giờ - Phút - Giây cập nhật thời gian thực từng giây.
 - **Thanh tiến trình nhiệm kỳ:** Thể hiện trực quan % chặng đường từ lúc bắt đầu trưng tập đến cột mốc hoàn thành.
 - **Nút Tiếp Năng Lượng & Bắn Pháo Hoa:** Tương tác bắn pháo hoa giấy Canvas Confetti kết hợp âm thanh tổng hợp Web Audio API và bộ đếm lượt bấm.
+- **Trình phát Nhạc Nền Ambient Lắng Đọng:** Tích hợp bộ tạo âm thanh Piano/Rhodes mộc mạc, nhẹ nhàng qua Web Audio API (vòng hợp âm Cmaj9 - Em7 - Fmaj9 - Gadd9 tempo ~60 BPM) kèm thanh sóng equalizer sinh động.
