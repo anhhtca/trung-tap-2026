@@ -38,7 +38,7 @@ typography:
     letterSpacing: "-0.035em"
   counter:
     fontFamily: "'Epilogue', sans-serif"
-    fontSize: "clamp(2.8rem, 6vw, 4.6rem)"
+    fontSize: "clamp(3rem, 6.5vw, 5.2rem)"
     fontWeight: 900
     lineHeight: 1
     letterSpacing: "-0.04em"
@@ -86,12 +86,13 @@ components:
 
 ## Overview
 
-Trang đếm ngược trực quan, tinh gọn tập trung vào tâm điểm đồng hồ đếm ngược đến 17:00 ngày 15/12/2026 dành riêng cho Đội Trưng Tập Ban Thẩm Định Tín Dụng 2026. Thiết kế mang phong cách Pop Festival ấm áp, năng động, mang tinh thần tích cực, trân trọng hành trình đã qua và háo hức hướng về đích hoàn thành xuất sắc nhiệm kỳ.
+Trang đếm ngược trực quan, cao cấp theo phong cách **Liquid Glass (Kính Thể Lỏng)** tập trung vào tâm điểm đồng hồ đếm ngược đến 17:00 ngày 15/12/2026 dành riêng cho Đội Trưng Tập Ban Thẩm Định Tín Dụng 2026. Thiết kế loại bỏ hoàn toàn các lớp phủ mờ đục trên toàn màn hình, giữ trọn vẹn vẻ sắc nét, trong trẻo của bức tranh thiên nhiên (rừng cây và bầu trời xanh), đồng thời đúc kết các bề mặt giao diện bằng kính lỏng với hiệu ứng khúc xạ quang học, viền sáng khúc xạ đỉnh và độ bão hòa cao.
 
 ## Colors
 
-- **Nền & Khung thẻ:** `#F8F9FC` kết hợp `#FFFFFF` cho bề mặt thẻ số.
-- **Màu Vermilion chủ đạo:** `#C72C14` truyền cảm hứng và nhiệt huyết, text `#9E1C0A` trên nền `#FDF2F0` đạt chuẩn tương phản cao WCAG AA.
+- **Nền Thiên Nhiên Sắc Nét (`assets/nature-bg.jpg`):** Phong cảnh rừng thông và bầu trời xanh ngát hiển thị nguyên bản, trong trẻo và sắc nét, không bị làm nhoè hay phủ sương mờ.
+- **Bề mặt Kính Thể Lỏng (Liquid Glass):** Sử dụng các tấm kính hữu cơ `linear-gradient(135deg, rgba(255, 255, 255, 0.68) 0%, rgba(255, 255, 255, 0.42) 100%)` kết hợp độ khúc xạ quang học sâu `backdrop-filter: blur(28px) saturate(190%)` và viền khúc xạ phản chiếu ánh sáng đỉnh `border-top: 1.5px solid #FFFFFF`.
+- **Màu Vermilion chủ đạo:** `#C72C14` truyền cảm hứng và nhiệt huyết, text `#9E1C0A` trên nền kính đạt chuẩn tương phản cao WCAG AA.
 - **Hệ màu thời gian:** 4 khối Ngày (Vermilion), Giờ (Purple `#5533EA`), Phút (Forest `#047857`), Giây (Amber `#B45309`).
 
 ## Typography
@@ -106,7 +107,11 @@ Trang đếm ngược trực quan, tinh gọn tập trung vào tâm điểm đ�
 
 ## Elevation & Depth
 
-- Chiều sâu chân thực (Physical Depth) với bóng đổ phân lớp tự nhiên, nhẹ nhàng, không dùng hiệu ứng glow viền nhân tạo.
+- **Liquid Refraction Depth:** Độ sâu quang học chất lỏng được tạo thành từ 3 lớp:
+  1. Viền sáng khúc xạ đỉnh (`border-top: 1.5px solid #FFFFFF`).
+  2. Ánh phản xạ nội tại (`box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95)`).
+  3. Bóng đổ tụ quang mềm dưới chân (`box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.22)`).
+- Không có hiện tượng nested cards (thẻ lồng trong thẻ); các cột số đếm ngược được phân cách bằng các dải khúc xạ ánh sáng mảnh và thoáng đãng.
 
 ## Components
 

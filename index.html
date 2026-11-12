@@ -81,7 +81,7 @@
 
     body {
       font-family: var(--font-body);
-      background-color: var(--bg);
+      background-color: #EBF3FA;
       color: var(--ink);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -90,6 +90,18 @@
       display: flex;
       flex-direction: column;
       position: relative;
+    }
+
+    /* Fixed panoramic nature backdrop - Sharp, clear, zero fog */
+    .nature-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url('assets/nature-bg.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      background-repeat: no-repeat;
+      pointer-events: none;
     }
 
     .container {
@@ -108,18 +120,22 @@
       justify-content: space-between;
       align-items: center;
       padding: 24px 0 20px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     }
 
+    /* Liquid Glass Team Badge */
     .team-badge {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       padding: 8px 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-top: 1.5px solid #FFFFFF;
       border-radius: var(--radius-full);
-      box-shadow: var(--shadow-sm);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95), 0 8px 20px -4px rgba(15, 23, 42, 0.08);
       font-weight: 700;
       font-size: 0.875rem;
       color: var(--ink);
@@ -131,7 +147,7 @@
       justify-content: center;
       width: 22px;
       height: 22px;
-      background: var(--vermilion-bg);
+      background: rgba(199, 44, 20, 0.12);
       color: var(--vermilion-text);
       border-radius: 50%;
       font-size: 0.8rem;
@@ -143,38 +159,44 @@
       gap: 12px;
     }
 
+    /* Liquid Glass Buttons */
     .btn-sound {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-top: 1.5px solid #FFFFFF;
       border-radius: var(--radius-full);
-      color: var(--ink-muted);
+      color: var(--ink);
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95), 0 8px 20px -4px rgba(15, 23, 42, 0.08);
     }
 
     .btn-sound:hover {
-      background: var(--surface-subtle);
+      background: rgba(255, 255, 255, 0.85);
       color: var(--ink);
-      border-color: #CBD5E1;
+      transform: translateY(-2px);
+      box-shadow: inset 0 1px 3px #FFFFFF, 0 12px 24px -4px rgba(15, 23, 42, 0.12);
     }
 
     .btn-bgm {
-      background: var(--surface);
+      background: rgba(255, 255, 255, 0.65);
       color: var(--ink);
-      border-color: var(--border);
     }
 
     .btn-bgm.is-playing {
-      background: var(--purple-bg);
+      background: rgba(244, 240, 255, 0.8);
       color: var(--purple-text);
-      border-color: var(--purple-border);
+      border-color: rgba(216, 206, 255, 0.9);
+      border-top: 1.5px solid #FFFFFF;
     }
 
     .equalizer-bars {
@@ -207,9 +229,88 @@
       50% { height: 13px; }
     }
 
+    /* Liquid Glass Volume Control */
+    .volume-control-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-top: 1.5px solid #FFFFFF;
+      border-radius: var(--radius-full);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95), 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+      height: 38px;
+    }
+
+    .btn-vol-icon {
+      background: none;
+      border: none;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-vol-icon:hover {
+      color: var(--vermilion);
+      transform: scale(1.1);
+    }
+
+    .volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 70px;
+      height: 4px;
+      background: rgba(15, 23, 42, 0.15);
+      border-radius: var(--radius-full);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--purple);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.2);
+      transition: transform 0.15s ease;
+    }
+
+    .volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--purple);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.2);
+    }
+
+    /* Responsive text toggles */
+    .btn-text-mobile, .bgm-text-mobile {
+      display: none;
+    }
+    .btn-text-desktop, .bgm-text-desktop {
+      display: inline;
+    }
+
     /* Hero Section */
     .hero {
-      padding: 60px 0 48px;
+      padding: 60px 0 44px;
       text-align: center;
     }
 
@@ -220,28 +321,46 @@
       line-height: 1.15;
       letter-spacing: -0.035em;
       color: var(--ink);
+      text-shadow: 0 2px 14px rgba(255, 255, 255, 0.95), 0 1px 2px rgba(255, 255, 255, 0.9);
       max-width: 950px;
-      margin: 0 auto 20px;
+      margin: 0 auto 24px;
     }
 
     .title-highlight {
       color: var(--vermilion);
     }
 
+    /* Liquid Glass Description Capsule */
     .hero-desc {
+      display: inline-block;
       font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-      color: var(--ink-muted);
-      max-width: 720px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-top: 1.5px solid #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 16px 28px;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.95), 0 10px 24px -6px rgba(15, 23, 42, 0.08);
+      max-width: 760px;
       margin: 0 auto 44px;
-      font-weight: 500;
+      font-weight: 600;
+      line-height: 1.6;
     }
 
-    /* Countdown Master Component */
+    /* Master Liquid Glass Countdown Container */
     .countdown-wrapper {
-      background: var(--surface);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.68) 0%, rgba(255, 255, 255, 0.42) 100%);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-top: 1.5px solid #FFFFFF;
+      box-shadow: 
+        inset 0 1px 2px 0 rgba(255, 255, 255, 0.95),
+        0 24px 48px -12px rgba(15, 23, 42, 0.22),
+        0 12px 24px -6px rgba(15, 23, 42, 0.12);
       padding: 44px 36px;
       margin-bottom: 56px;
       position: relative;
@@ -250,45 +369,42 @@
     .countdown-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
+      gap: 16px;
       margin-bottom: 36px;
+      padding: 12px 0 18px;
     }
 
-    .countdown-card {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 28px 16px;
+    /* Liquid Glass Typographic Columns (No nested card boxes) */
+    .countdown-unit {
       text-align: center;
       position: relative;
-      background: var(--surface-subtle);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+      padding: 12px 8px;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .countdown-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
+    .countdown-unit:hover {
+      transform: translateY(-3px);
     }
 
-    .countdown-card.card-days {
-      background: linear-gradient(180deg, #FFFFFF 0%, #FFF5F3 100%);
-      border-color: #FECDCA;
-    }
-    .countdown-card.card-hours {
-      background: linear-gradient(180deg, #FFFFFF 0%, #F5F1FF 100%);
-      border-color: #D8CEFF;
-    }
-    .countdown-card.card-mins {
-      background: linear-gradient(180deg, #FFFFFF 0%, #ECFDF5 100%);
-      border-color: #A7F3D0;
-    }
-    .countdown-card.card-secs {
-      background: linear-gradient(180deg, #FFFFFF 0%, #FFFBEB 100%);
-      border-color: #FDE68A;
+    /* Elegant glass fluting dividers between units */
+    .countdown-unit:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 15%;
+      bottom: 15%;
+      right: 0;
+      width: 1px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
     }
 
     .card-number {
       font-family: var(--font-display);
-      font-size: clamp(2.8rem, 6vw, 4.6rem);
+      font-size: clamp(3rem, 6.5vw, 5.2rem);
       font-weight: 900;
       line-height: 1;
       letter-spacing: -0.04em;
@@ -296,35 +412,40 @@
       display: block;
     }
 
-    .card-days .card-number { color: var(--vermilion-text); }
-    .card-hours .card-number { color: var(--purple-text); }
-    .card-mins .card-number { color: var(--forest-text); }
-    .card-secs .card-number { color: var(--amber-text); }
+    .unit-days .card-number { color: var(--vermilion-text); }
+    .unit-hours .card-number { color: var(--purple-text); }
+    .unit-mins .card-number { color: var(--forest-text); }
+    .unit-secs .card-number { color: var(--amber-text); }
 
     .card-label {
       font-size: 0.85rem;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       color: var(--ink-muted);
     }
 
-    /* Progress bar */
+    /* Liquid Progress Bar */
     .timeline-bar-wrap {
-      background: var(--surface-subtle);
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius-full);
       padding: 6px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-top: 1.5px solid #FFFFFF;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 4px 12px rgba(15, 23, 42, 0.05);
       position: relative;
       margin-bottom: 24px;
     }
 
     .timeline-progress-track {
       height: 18px;
-      background: #E2E8F0;
+      background: rgba(15, 23, 42, 0.08);
       border-radius: var(--radius-full);
       overflow: hidden;
       position: relative;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
     }
 
     .timeline-progress-fill {
@@ -340,8 +461,8 @@
       justify-content: space-between;
       margin-top: 10px;
       font-size: 0.85rem;
-      color: var(--ink-muted);
-      font-weight: 600;
+      color: var(--ink);
+      font-weight: 700;
     }
 
     .timeline-status {
@@ -357,27 +478,31 @@
 
     .status-highlight {
       color: var(--vermilion-text);
-      background: var(--vermilion-bg);
-      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 4px 14px;
       border-radius: var(--radius-full);
-      border: 1px solid #FECDCA;
+      border: 1px solid rgba(254, 205, 202, 0.95);
+      border-top: 1.5px solid #FFFFFF;
+      box-shadow: inset 0 1px 1px #FFFFFF, 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
-    /* Primary Interaction: Confetti & Energy Boost */
+    /* Primary Interaction: Liquid Fire Button */
     .celebrate-dock {
       display: flex;
       align-items: center;
       justify-content: center;
       margin-top: 32px;
       padding-top: 32px;
-      border-top: 1px dashed var(--border);
+      border-top: 1px solid rgba(255, 255, 255, 0.45);
     }
 
     .btn-fire {
       appearance: none;
       border: none;
       outline: none;
-      background: var(--vermilion);
+      background: linear-gradient(135deg, var(--vermilion) 0%, var(--vermilion-hover) 100%);
       color: #FFFFFF;
       font-family: inherit;
       font-size: 1.1rem;
@@ -385,17 +510,21 @@
       padding: 18px 42px;
       border-radius: var(--radius-full);
       cursor: pointer;
-      box-shadow: var(--shadow-md);
+      border-top: 1.5px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        0 14px 28px -4px rgba(199, 44, 20, 0.45);
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-fire:hover {
-      background: var(--vermilion-hover);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 
+        inset 0 1px 3px rgba(255, 255, 255, 0.6),
+        0 18px 36px -4px rgba(199, 44, 20, 0.55);
     }
 
     .btn-fire:active {
@@ -411,14 +540,19 @@
       font-weight: 800;
     }
 
-    /* Footer */
+    /* Liquid Glass Footer */
     .page-footer {
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.62);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
       padding: 36px 0 48px;
       text-align: center;
       color: var(--ink-muted);
       font-size: 0.9rem;
       margin-top: auto;
+      position: relative;
+      z-index: 1;
     }
 
     .footer-quote {
@@ -448,22 +582,65 @@
         grid-template-columns: 1fr 1fr;
         gap: 12px;
       }
-      .countdown-card {
+      .countdown-unit {
         padding: 20px 10px;
-      }
-      .btn-fire {
-        width: 100%;
-        justify-content: center;
       }
       .top-bar {
         flex-direction: column;
         gap: 12px;
-        align-items: flex-start;
+        align-items: stretch;
+      }
+      .nav-actions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .btn-bgm {
+        padding: 6px 12px;
+        font-size: 0.82rem;
+        height: 38px;
+        flex: 1;
+        justify-content: center;
+      }
+      .volume-control-box {
+        padding: 5px 10px;
+        height: 38px;
+        gap: 6px;
+      }
+      .volume-slider {
+        width: 55px;
+      }
+      /* Compact, mobile-friendly energy button */
+      .btn-fire {
+        width: auto;
+        max-width: 92%;
+        margin: 0 auto;
+        padding: 11px 20px;
+        font-size: 0.95rem;
+        gap: 8px;
+      }
+      .btn-fire svg {
+        width: 18px;
+        height: 18px;
+      }
+      .btn-fire-counter {
+        font-size: 0.8rem;
+        padding: 3px 8px;
+      }
+      /* Toggle mobile-optimized text */
+      .btn-text-desktop, .bgm-text-desktop {
+        display: none !important;
+      }
+      .btn-text-mobile, .bgm-text-mobile {
+        display: inline !important;
       }
     }
   </style>
 </head>
 <body>
+  <div class="nature-backdrop"></div>
+  <audio id="bgm-audio" src="assets/bgm.mp3" preload="metadata" loop></audio>
   <canvas id="confetti-canvas"></canvas>
 
   <div class="container">
@@ -474,14 +651,25 @@
         <span>Ban Thẩm Định Tín Dụng 2026 • Đội Trưng Tập</span>
       </div>
       <div class="nav-actions">
-        <button id="toggle-bgm-btn" class="btn-sound btn-bgm" title="Bật/Tắt nhạc nền nhẹ nhàng lắng đọng">
+        <button id="toggle-bgm-btn" class="btn-sound btn-bgm" title="Bật/Tắt nhạc nền: Clair de Lune (Claude Debussy)">
           <span class="equalizer-bars" id="eq-bars">
             <span class="eq-bar"></span>
             <span class="eq-bar"></span>
             <span class="eq-bar"></span>
           </span>
-          <span id="bgm-status-text">Bật Nhạc Nền</span>
+          <span id="bgm-text-desktop" class="bgm-text-desktop">Bật Nhạc Nền (Clair de Lune)</span>
+          <span id="bgm-text-mobile" class="bgm-text-mobile">Nhạc Nền</span>
         </button>
+        <div class="volume-control-box" title="Điều chỉnh âm lượng nhạc nền">
+          <button id="btn-volume-icon" class="btn-vol-icon" aria-label="Tắt hoặc bật âm lượng">
+            <svg id="vol-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+          </button>
+          <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.02" value="0.35" aria-label="Thanh âm lượng">
+        </div>
       </div>
     </header>
 
@@ -497,19 +685,19 @@
       <!-- Main Countdown Box -->
       <div class="countdown-wrapper">
         <div class="countdown-grid">
-          <div class="countdown-card card-days">
+          <div class="countdown-unit unit-days">
             <span id="val-days" class="card-number">--</span>
             <span class="card-label">Ngày</span>
           </div>
-          <div class="countdown-card card-hours">
+          <div class="countdown-unit unit-hours">
             <span id="val-hours" class="card-number">--</span>
             <span class="card-label">Giờ</span>
           </div>
-          <div class="countdown-card card-mins">
+          <div class="countdown-unit unit-mins">
             <span id="val-mins" class="card-number">--</span>
             <span class="card-label">Phút</span>
           </div>
-          <div class="countdown-card card-secs">
+          <div class="countdown-unit unit-secs">
             <span id="val-secs" class="card-number">--</span>
             <span class="card-label">Giây</span>
           </div>
@@ -542,7 +730,8 @@
               <path d="M22 20h.01"></path>
               <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 2.36L17.5 8"></path>
             </svg>
-            <span>Bấm để Tiếp Năng Lượng & Bắn Pháo Hoa</span>
+            <span class="btn-text-desktop">Bấm để Tiếp Năng Lượng & Bắn Pháo Hoa</span>
+            <span class="btn-text-mobile">Tiếp Năng Lượng 🎉</span>
             <span id="fire-count-badge" class="btn-fire-counter">142</span>
           </button>
         </div>
@@ -573,9 +762,76 @@
     const elFireBtn = document.getElementById('btn-fire-confetti');
     const elFireCounter = document.getElementById('fire-count-badge');
     const elBgmBtn = document.getElementById('toggle-bgm-btn');
-    const elBgmText = document.getElementById('bgm-status-text');
+    const elBgmTextDesktop = document.getElementById('bgm-text-desktop');
+    const elBgmTextMobile = document.getElementById('bgm-text-mobile');
+    const elBgmAudio = document.getElementById('bgm-audio');
+    const elVolumeSlider = document.getElementById('volume-slider');
+    const elBtnVolumeIcon = document.getElementById('btn-volume-icon');
+    const elVolIconSvg = document.getElementById('vol-icon-svg');
 
-    // Ambient Gentle Background Music Engine (Pure Web Audio - Warm Rhodes/Piano)
+    let currentVolume = 0.35;
+    let isMuted = false;
+
+    if (elBgmAudio) {
+      elBgmAudio.volume = currentVolume; // Gentle, relaxing background volume
+    }
+
+    // Volume Control Logic
+    function updateVolumeIcon() {
+      if (!elVolIconSvg) return;
+      if (isMuted || currentVolume === 0) {
+        elVolIconSvg.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        `;
+      } else if (currentVolume < 0.4) {
+        elVolIconSvg.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        `;
+      } else {
+        elVolIconSvg.innerHTML = `
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        `;
+      }
+    }
+
+    function applyVolume(vol, mutedState = isMuted) {
+      const activeVol = mutedState ? 0 : vol;
+      if (elBgmAudio) {
+        elBgmAudio.volume = activeVol;
+      }
+      if (bgmMasterGain && audioCtx) {
+        bgmMasterGain.gain.setValueAtTime(activeVol * 0.7, audioCtx.currentTime);
+      }
+      updateVolumeIcon();
+    }
+
+    if (elVolumeSlider) {
+      elVolumeSlider.addEventListener('input', (e) => {
+        currentVolume = parseFloat(e.target.value);
+        if (currentVolume > 0 && isMuted) {
+          isMuted = false;
+        }
+        applyVolume(currentVolume, isMuted);
+      });
+    }
+
+    if (elBtnVolumeIcon) {
+      elBtnVolumeIcon.addEventListener('click', () => {
+        isMuted = !isMuted;
+        if (!isMuted && currentVolume === 0) {
+          currentVolume = 0.35;
+          if (elVolumeSlider) elVolumeSlider.value = currentVolume;
+        }
+        applyVolume(currentVolume, isMuted);
+      });
+    }
+
+    // Ambient Gentle Background Music Engine (Audio Track + Web Audio Synthesizer Fallback)
     let audioCtx = null;
     let bgmMasterGain = null;
     let bgmPlaying = false;
@@ -685,18 +941,37 @@
     }
 
     function startBgm() {
-      initAudio();
       bgmPlaying = true;
       elBgmBtn.classList.add('is-playing');
-      elBgmText.textContent = 'Nhạc nền: Đang phát';
-      scheduleBgmMeasure();
+      if (elBgmTextDesktop) elBgmTextDesktop.textContent = 'Clair de Lune (Đang phát)';
+      if (elBgmTextMobile) elBgmTextMobile.textContent = 'Đang phát ♫';
+      
+      if (elBgmAudio) {
+        applyVolume(currentVolume, isMuted);
+        elBgmAudio.play().then(() => {
+          // Successfully playing Clair de Lune audio track
+        }).catch(err => {
+          // Fallback to synthesized ambient Rhodes piano
+          initAudio();
+          applyVolume(currentVolume, isMuted);
+          scheduleBgmMeasure();
+        });
+      } else {
+        initAudio();
+        applyVolume(currentVolume, isMuted);
+        scheduleBgmMeasure();
+      }
     }
 
     function stopBgm() {
       bgmPlaying = false;
+      if (elBgmAudio) {
+        elBgmAudio.pause();
+      }
       if (bgmTimer) clearTimeout(bgmTimer);
       elBgmBtn.classList.remove('is-playing');
-      elBgmText.textContent = 'Bật Nhạc Nền';
+      if (elBgmTextDesktop) elBgmTextDesktop.textContent = 'Bật Nhạc Nền (Clair de Lune)';
+      if (elBgmTextMobile) elBgmTextMobile.textContent = 'Nhạc Nền';
     }
 
     elBgmBtn.addEventListener('click', () => {
